@@ -4,32 +4,44 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const APP_DIR = path.resolve(__dirname, 'src')
 const BUILD_DIR = path.resolve(__dirname, 'dist')
-const debug = process.env.NODE_ENV !== 'production'
+const DEBUG = process.env.NODE_ENV !== 'production'
 
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
-  template: APP_DIR.concat('/index.html'),
+  template: APP_DIR + '/index.html',
   filename: 'index.html',
   inject: 'body'
 })
 
-let OptPlugin = debug ? [] : [
+let OptPlugins = DEBUG ? [] : [
   new webpack.optimize.DedupePlugin(),
   new webpack.optimize.OccurrenceOrderPlugin(),
   new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false })
 ]
+
+let devPlugins = [
+  HtmlWebpackPluginConfig,
+  new webpack.HotModuleReplacementPlugin()
+]
 module.exports = {
-  entry: APP_DIR + '/index.js',
+  entry: ['babel-polyfill', 'react-hot-loader/patch', APP_DIR + '/index.js'],
   output: {
     path: BUILD_DIR,
     filename: '[name].bundle.js'
   },
-  devtool: debug ? 'source-map' : false,
+  devtool: DEBUG ? 'eval' : false,
+  resolve: {
+    extensions: ['*', '.js', '.jsx']
+  },
+  devServer: {
+    contentBase: BUILD_DIR,
+    hot: true
+  },
   module: {
     loaders: [
-      { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
-      { test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ },
-      { test: /\.html$/, loader: 'html-loader' }
+      { test: /\.(js|jsx)$/, loader: 'babel-loader', exclude: /node_modules/ },
+      { test: /\.html$/, loader: 'html-loader' },
+      { test: /\.css$/, use: ['style-loader', 'css-loader'] }
     ]
   },
-  plugins: [...OptPlugin, HtmlWebpackPluginConfig]
+  plugins: [...OptPlugins, ...devPlugins]
 }
