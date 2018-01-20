@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Get started with React, Redux, and React-Router!",
   "main": "index.js",
-  "author": "",
+  "author": "Amarkant Kumar <amarkantk14@gmail.com>",
   "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server --open"
@@ -11,9 +11,12 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "path": "^0.12.7",
+    "promise": "^8.0.1",
+    "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
+    "react-router": "^4.2.0",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "standard": "^10.0.3"
@@ -23,11 +26,26 @@
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
+    "css-loader": "^0.28.9",
+    "file-loader": "^1.1.6",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^2.30.1",
+    "style-loader": "^0.19.1",
+    "url-loader": "^0.6.2",
     "webpack": "^3.10.0",
     "webpack-dev-middleware": "^2.0.4",
     "webpack-dev-server": "^2.11.0",
     "webpack-hot-middleware": "^2.21.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/amarkantk14/react-redux-starter-kit.git"
+  },
+  "keywords": [
+    "react",
+    "redux",
+    "webpack",
+    "webpack-dev-server",
+    "react-starter-kit"
+  ]
 }
