@@ -10,7 +10,8 @@
     "dev": "NODE_ENV=development webpack -d --watch --config webpack.config.babel.js --hot --progress",
     "new:dev": "NODE_ENV=development webpack -d --config ./webpack/webpack.dev.babel.js --watch --hot --progress",
     "prod": "NODE_ENV=production webpack -p --progress",
-    "new:prod": "NODE_ENV=production webpack -p --config ./webpack/webpack.prod.babel.js --progress"
+    "new:prod": "NODE_ENV=production webpack -p --config ./webpack/webpack.prod.babel.js --progress",
+    "server": "node server.js"
   },
   "engines": {
     "node": ">= 8.9.4",
@@ -19,6 +20,7 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "babel-register": "^6.26.0",
+    "express": "^4.16.2",
     "path": "^0.12.7",
     "promise": "^8.0.1",
     "prop-types": "^15.6.0",

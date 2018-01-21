@@ -10,7 +10,6 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   filename: 'index.html',
   inject: 'body'
 });
-console.log(APP_DIR);
 module.exports = {
   context: APP_DIR,
   entry: {
@@ -25,7 +24,8 @@ module.exports = {
   output: {
     path: BUILD_DIR,
     filename: '[name].[hash].js',
-    chunkFilename: '[id].[chunkhash].bundle.js'
+    chunkFilename: '[id].[chunkhash].bundle.js',
+    publicPath: '/'
   },
   plugins: [
     new webpack.DefinePlugin({
