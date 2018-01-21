@@ -8,7 +8,9 @@
   "scripts": {
     "start": "webpack-dev-server --hot --open --progress --inline",
     "dev": "NODE_ENV=development webpack -d --watch --config webpack.config.babel.js --hot --progress",
-    "build": "NODE_ENV=production webpack -p"
+    "new:dev": "NODE_ENV=development webpack -d --config ./webpack/webpack.dev.babel.js --watch --hot --progress",
+    "prod": "NODE_ENV=production webpack -p --progress",
+    "new:prod": "NODE_ENV=production webpack -p --config ./webpack/webpack.prod.babel.js --progress"
   },
   "engines": {
     "node": ">= 8.9.4",
