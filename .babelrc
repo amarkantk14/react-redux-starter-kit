@@ -1,8 +1,13 @@
 {
   "presets": [
-    "env",
+    ["env", {
+      "targets": {
+        "node": "current"
+      }
+    }],
     "react",
-    "react-hmre"
+    "react-hmre",
+    "flow"
   ],
   "plugins": ["react-hot-loader/babel"]
 }
