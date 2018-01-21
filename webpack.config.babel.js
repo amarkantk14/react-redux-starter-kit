@@ -1,8 +1,8 @@
-import fs from 'fs';
 import path from 'path';
 import webpack from 'webpack';
 import HtmlWebpackPlugin  from 'html-webpack-plugin';
 import CleanWebpackPlugin from 'clean-webpack-plugin';
+import CompressionPlugin from 'compression-webpack-plugin';
 
 const APP_DIR = path.resolve(__dirname, 'src');
 const BUILD_DIR = path.resolve(__dirname, 'dist');
@@ -17,13 +17,44 @@ const DevPlugins = [
     name: 'vendor'
   }),
   new CleanWebpackPlugin([BUILD_DIR]),
-  new webpack.HashedModuleIdsPlugin()
+  new webpack.HashedModuleIdsPlugin(),
+  new webpack.DefinePlugin({
+    'process.env': {
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+    }
+  })
 ];
 
 const OptPlugins = DEBUG ? [] : [
-  new webpack.optimize.DedupePlugin(),
   new webpack.optimize.OccurrenceOrderPlugin(),
-  new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false })
+  new webpack.optimize.UglifyJsPlugin(
+    {
+      mangle: false,
+      sourceMap: true,
+      cache: true,
+      parallel: true,
+      uglifyOptions: { ecma: 8 }
+    }
+  ),
+  new webpack.optimize.AggressiveSplittingPlugin(
+    {
+      minSize: 30000,
+      maxSize: 50000,
+      chunkOverhead: 0,
+      entryChunkMultiplicator: 1
+    }
+  ),
+  new webpack.optimize.CommonsChunkPlugin({
+    minChunks: Infinity,
+    async: true
+  }),
+  new CompressionPlugin({
+    asset: '[path].gz[query]',
+    algorithm: 'gzip',
+    test: /\.js$|\.css$|\.html$/,
+    threshold: 10240,
+    minRatio: 0
+  })
 ];
 
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
@@ -50,7 +81,7 @@ module.exports = {
     path: BUILD_DIR,
     filename: '[name].[hash].js',
     chunkFilename: '[id].[chunkhash].bundle.js',
-    hotUpdateChunkFilename: "[id].[hash].hot-update.js"
+    hotUpdateChunkFilename: '[id].[hash].hot-update.js'
   },
   devtool: DEBUG ? 'eval' : false,
   resolve: {
@@ -66,17 +97,10 @@ module.exports = {
       ignored: ['/node_modules/']
     },
     headers: {
-      "X-Powered-by": "Tripogon, Inc"
+      'X-Powered-by': 'Tripogon, Inc'
     },
-    host: "127.0.0.1",
+    host: '127.0.0.1',
     port: 8080,
-    /*
-    https: {
-      key: fs.readFileSync("./privateKey.key"),
-      cert: fs.readFileSync("./certificate.crt"),
-      ca: fs.readFileSync("/path/to/ca.pem"),
-    },
-    */
     index: 'index.html',
     publicPath: '/',
     open: true
@@ -93,9 +117,20 @@ module.exports = {
             loader: 'file-loader',
             options: {
               name: '[path][name].[ext]'
-            }  
+            }
           }
         ]
+      },
+      {
+        test: /\.(eot|otf|svg|ttf|woff|woff2)(\?[\s\S]+)?$/,
+        exclude: /node_modules/,
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: 'fonts/[name].[hash].[ext]'
+          }
+        }],
+        include: path.join(__dirname, 'public', 'fonts')
       }
     ]
   },
@@ -104,4 +139,4 @@ module.exports = {
     ...DevPlugins,
     HtmlWebpackPluginConfig
   ]
-}
+};
