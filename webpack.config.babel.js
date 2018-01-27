@@ -96,9 +96,6 @@ module.exports = {
       poll: 1000,
       ignored: ['/node_modules/']
     },
-    headers: {
-      'X-Powered-by': 'Tripogon, Inc'
-    },
     host: '127.0.0.1',
     port: 8080,
     index: 'index.html',
