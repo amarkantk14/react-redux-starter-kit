@@ -96,8 +96,8 @@ module.exports = {
       poll: 1000,
       ignored: ['/node_modules/']
     },
-    host: '127.0.0.1',
-    port: 8080,
+    host: process.env.HOST,
+    port: process.env.PORT,
     index: 'index.html',
     publicPath: '/',
     open: true
